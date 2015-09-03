@@ -178,7 +178,7 @@ server.route([{
       diceArray.forEach(function(token) {
         if (token.match && token.match(/d/)) {
           rolls = roll(token, p.user_name);
-          if (rolls.diff) {
+          if (rolls.diff !== null) {
             var successes = rolls.dice.reduce(function(a, b) {
               if (b == 1) {
                 return a - 1;
