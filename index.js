@@ -95,10 +95,6 @@ function roll(dieStr, user) {
       for (var i = 0; i < dice; i++) {
         var value = Math.floor(sides * Math.random() + 1);
 
-        if (user == 'thehalforc') {
-          value = Math.max(1, Math.floor(value/2));
-        }
-
         rolls.push(value);
       }
 
