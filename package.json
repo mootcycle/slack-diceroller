@@ -1,0 +1,18 @@
+{
+  "name": "diceroller",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "^9.0.2",
+    "boom": "^2.8.0",
+    "joi": "^6.6.1",
+    "winston": "^1.0.1",
+    "wreck": "^6.1.0"
+  }
+}

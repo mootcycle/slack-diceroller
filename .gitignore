@@ -1,0 +1,4 @@
+/node_modules/
+teams.json
+rsync_ignores.txt
+update.sh
