@@ -189,8 +189,9 @@ server.route([{
               }
             }, 0);
             total.push(successes);
+            var successText = successes == 1 ? ' success' : ' successes';
             diceValues.push('[' + rolls.dice.join(',') + '] diff ' +
-                rolls.diff + ' with ' + successes + ' successes');
+                rolls.diff + ' with ' + successes + successText);
           } else {
             total.push(rolls.dice.reduce(function(a, b) {
               return a + b;
@@ -249,7 +250,11 @@ server.route([{
         })
       }, function(err, response, payload) {
         if (err) {
-          winston.error({error: 'wreck request to slack failed', payload: p});
+          winston.error({
+            wreckError: err,
+            error: 'wreck request to slack failed',
+            payload: p
+          });
         }
       });
       reply();
