@@ -248,7 +248,9 @@ server.route([{
           "text": wreckText
         })
       }, function(err, response, payload) {
-        winston.error({error: 'wreck request to slack failed', payload: p});
+        if (err) {
+          winston.error({error: 'wreck request to slack failed', payload: p});
+        }
       });
       reply();
     } else {
