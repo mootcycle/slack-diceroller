@@ -18,6 +18,7 @@ winston.add(winston.transports.File, {
 
 var server = new Hapi.Server();
 server.connection({ port: 4617, host: '127.0.0.1' });
+server.register(require('inert'), function() {});
 
 var rollSchema = Joi.object().keys({
   token: Joi.string().required(),
@@ -137,6 +138,16 @@ function tokenize(str) {
 }
 
 server.route([{
+  method: 'GET',
+  path: '/{param*}',
+  handler: {
+    directory: {
+      path: 'static',
+      redirectToSlash: true,
+      index: true
+    }
+  }
+},{
   method: 'POST',
   path: '/roll',
   config: {
