@@ -8,7 +8,8 @@ Next, go back to https://your-team.slack.com/services and expand the section for
 
 On your server, you'll need to create a configuration file named `teams.json` and populate it with the webhook url and the token. The format for the `teams.json` file is:
 
-```[
+```
+[
   {
     "teamName": "your team name",
     "teamId": "TXXXXXXXX",
@@ -16,7 +17,8 @@ On your server, you'll need to create a configuration file named `teams.json` an
     "token": "yourLongTokenGoesHere"
   },
   { [more teams] },
-]```
+]
+```
 
 Start the server with `node index.js` and test it out by issuing a /roll command on your Slack team.
 
