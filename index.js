@@ -158,19 +158,20 @@ server.route([{
   handler: function (request, reply) {
     var p = request.payload;
 
+    if (teamTokens[p.team_id] !== p.token) {
+      winston.error({error: 'token not found', payload: p});
+      return reply(Boom.badRequest('Token not found.'));
+    }
+    delete(p.token);
+
     if (p.command != '/roll') {
       winston.error({error: 'command not found', payload: p});
       return reply(Boom.badRequest('Command not supported.'));
     }
 
-    if (teamTokens[p.team_id] !== p.token) {
-      winston.error({error: 'token not found', payload: p});
-      return reply(Boom.badRequest('Token not found.'));
-    }
-
     if (!teamWebHooks[p.team_id]) {
-      winston.error({error: 'team_id not found', payload: p});
-      return reply(Boom.badRequest('Team not found.'));
+      winston.error({error: 'web hook url not found', payload: p});
+      return reply(Boom.badRequest('WebHook URL not found.'));
     }
 
     if (p.text.length > 60) {
