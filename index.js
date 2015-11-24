@@ -154,12 +154,14 @@ server.route([{
   },
   handler: function (request, reply) {
     var p = request.payload;
+    var responseUrl = p.response_url;
 
     if (teamTokens[p.token] !== true) {
       winston.error({error: 'token not found', payload: p});
       return reply(Boom.badRequest('Token not found.'));
     }
     delete(p.token);
+    delete(p.response_url);
 
     if (p.command != '/roll') {
       winston.error({error: 'command not found', payload: p});
@@ -245,7 +247,7 @@ server.route([{
     winston.info({diceArray: diceArray, diceValues: diceValues, payload: p});
 
     if (diceValues.length) {
-      Wreck.post(p.response_url, {
+      Wreck.post(responseUrl, {
         payload: JSON.stringify({
           "response_type": "in_channel",
           "text": wreckText
