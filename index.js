@@ -29,7 +29,8 @@ var rollSchema = Joi.object().keys({
   user_id: Joi.string().required(),
   user_name: Joi.string().required(),
   command: Joi.string().required(),
-  text: Joi.string().required()
+  text: Joi.string().required(),
+  response_url: Joi.string()
 });
 
 var teamsSchema = Joi.array().items(
