@@ -36,8 +36,6 @@ var rollSchema = Joi.object().keys({
 var teamsSchema = Joi.array().items(
   Joi.object().keys({
     teamName: Joi.string().required(),
-    teamId: Joi.string().required(),
-    webHookUrl: Joi.string().required(),
     token: Joi.string().required()
   })
 );
@@ -56,15 +54,13 @@ teamsSchema.validate(teamJson, function(err, value) {
   }
 });
 
-var teamWebHooks = {};
 var teamTokens = {};
 var teamNames = {};
 
 teamJson.forEach(function(team) {
-  teamWebHooks[team.teamId] = team.webHookUrl;
-  teamTokens[team.teamId] = team.token;
+  teamTokens[team.token] = true;
   // Team name isn't really used for anything, it just decorates the data file.
-  teamNames[team.teamId] = team.teamName;
+  teamNames[team.token] = team.teamName;
 });
 
 var math = [
@@ -159,7 +155,7 @@ server.route([{
   handler: function (request, reply) {
     var p = request.payload;
 
-    if (teamTokens[p.team_id] !== p.token) {
+    if (teamTokens[p.token] !== true) {
       winston.error({error: 'token not found', payload: p});
       return reply(Boom.badRequest('Token not found.'));
     }
@@ -168,11 +164,6 @@ server.route([{
     if (p.command != '/roll') {
       winston.error({error: 'command not found', payload: p});
       return reply(Boom.badRequest('Command not supported.'));
-    }
-
-    if (!teamWebHooks[p.team_id]) {
-      winston.error({error: 'web hook url not found', payload: p});
-      return reply(Boom.badRequest('WebHook URL not found.'));
     }
 
     if (p.text.length > 60) {
@@ -254,11 +245,9 @@ server.route([{
     winston.info({diceArray: diceArray, diceValues: diceValues, payload: p});
 
     if (diceValues.length) {
-      Wreck.post(teamWebHooks[p.team_id], {
+      Wreck.post(p.response_url, {
         payload: JSON.stringify({
-          "username": "rollbot",
-          "icon_emoji": ":dice1:",
-          "channel": p.channel_id,
+          "response_type": "in_channel",
           "text": wreckText
         })
       }, function(err, response, payload) {
